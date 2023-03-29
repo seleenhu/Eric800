@@ -1,0 +1,267 @@
+﻿/*
+*********************************************************************************************************
+*	                                  
+*	模块名称 : 外置XBF格式字库到SPI FLASH
+*	文件名称 : MainTask.c
+*	版    本 : V1.0
+*	说    明 : 支持点阵：
+*                1. 宋体16点阵，24点阵，32点阵的unicode编码完整字体。
+*              字库存储方式：
+*                1. 字库存储到SPI FLASH里面。
+*              实验步骤如下：
+*                1. 将字库文件font.bin放到SD卡根目录中，系统上电后会将其加载到SPI FLASH里面。
+*                2. 板子上电后会有一个加载进度指示，存储到SPI FLASH成功后会显示一个对话框。
+*                3. 字体文件为7.28MB，SPI FLASH为8MB，加载过程稍有些慢，请耐心等待。
+*              
+*	修改记录 :
+*		版本号   日期         作者          说明
+*		V1.0    2016-07-16   Eric2013  	    首版    
+*                                     
+*	Copyright (C), 2015-2020, 安富莱电子 www.armfly.com
+*
+*********************************************************************************************************
+*/
+#include "bsp.h"
+#include "GUI.h"
+#include "font.h"
+#define User_Song
+
+
+#ifndef GUI_CONST_STORAGE
+  #define GUI_CONST_STORAGE const
+#endif
+#ifdef User_Song
+#define   XBF_Font16BaseAdd    0x00000000
+GUI_XBF_DATA XBF_Data16;
+GUI_FONT     XBF_Font16;
+void         *Fontfile16;
+
+/* 宋体24点阵定义 */
+#define   XBF_Font24BaseAdd    0x0015B7B6
+GUI_XBF_DATA XBF_Data24;
+GUI_FONT     XBF_Font24;
+void         *Fontfile24;
+
+/* 宋体32点阵定义 */
+#define   XBF_Font32BaseAdd    0x003CEF64
+GUI_XBF_DATA XBF_Data32;
+GUI_FONT     XBF_Font32;
+void         *Fontfile32;
+#else
+	
+#define   XBF_Font16BaseAdd    0x00000000
+GUI_XBF_DATA XBF_Data16;
+GUI_FONT     XBF_Font16;
+void         *Fontfile16;
+
+/* 宋体24点阵定义 */
+#define   XBF_Font24BaseAdd    0x0015A272
+GUI_XBF_DATA XBF_Data24;
+GUI_FONT     XBF_Font24;
+void         *Fontfile24;
+
+/* 宋体32点阵定义 */
+#define   XBF_Font32BaseAdd    0x003CA9A4
+GUI_XBF_DATA XBF_Data32;
+GUI_FONT     XBF_Font32;
+void         *Fontfile32;	
+#endif	
+/*
+*********************************************************************************************************
+*	                                  调用外部字体
+*********************************************************************************************************
+*/
+extern GUI_CONST_STORAGE GUI_FONT GUI_FontSong16;
+	
+	
+/*
+*********************************************************************************************************
+*	                                        用于SD卡
+*********************************************************************************************************
+*/
+
+FILE *fp;	
+//FILE file;
+
+
+uint8_t tempbuf[4096];  /* 从SD卡读取数据的缓冲 */
+/*
+*********************************************************************************************************
+*	函 数 名: _cbGetData16
+*	功能说明: XBF字体的回调函数, 16点阵
+*	形    参: Off      - 地址偏移 
+*             NumBytes - 需要读出的字节数
+*             pVoid    - 指针变量，一般用于带文件系统时的FIL类型变量
+*             pBuffer  - 获取字体的点阵数据
+*	返 回 值: 0 表示成功 1 表示失败
+*********************************************************************************************************
+*/
+static int _cbGetData16(U32 Off, U16 NumBytes, void * pVoid, void * pBuffer)
+{	
+	/* 读取点阵数据 */
+	sf_ReadBuffer(pBuffer, XBF_Font16BaseAdd + Off, NumBytes);
+	return 0;
+}
+
+/*
+*********************************************************************************************************
+*	函 数 名: _cbGetData24
+*	功能说明: XBF字体的回调函数, 24点阵
+*	形    参: Off      - 地址偏移 
+*             NumBytes - 需要读出的字节数
+*             pVoid    - 指针变量，一般用于带文件系统时的FIL类型变量
+*             pBuffer  - 获取字体的点阵数据
+*	返 回 值: 0 表示成功 1 表示失败
+*********************************************************************************************************
+*/
+static int _cbGetData24(U32 Off, U16 NumBytes, void * pVoid, void * pBuffer)
+{	
+	/* 读取点阵数据 */
+	sf_ReadBuffer(pBuffer, XBF_Font24BaseAdd + Off, NumBytes);
+	return 0;
+}
+
+/*
+*********************************************************************************************************
+*	函 数 名: _cbGetData32
+*	功能说明: XBF字体的回调函数, 32点阵
+*	形    参: Off      - 地址偏移 
+*             NumBytes - 需要读出的字节数
+*             pVoid    - 指针变量，一般用于带文件系统时的FIL类型变量
+*             pBuffer  - 获取字体的点阵数据
+*	返 回 值: 0 表示成功 1 表示失败
+*********************************************************************************************************
+*/
+static int _cbGetData32(U32 Off, U16 NumBytes, void * pVoid, void * pBuffer)
+{	
+	/* 读取点阵数据 */
+	sf_ReadBuffer(pBuffer, XBF_Font32BaseAdd + Off, NumBytes);
+	return 0;
+}
+
+/*
+*********************************************************************************************************
+*	函 数 名: GUI_SetXBF
+*	功能说明: 创建XBF字体
+*	形    参: 无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+void GUI_SetXBF(void) 
+{
+
+	/* 创建16点阵字体 */
+	GUI_XBF_CreateFont(&XBF_Font16,        /* GUI_FONT类型变量     */
+					 &XBF_Data16,          /* GUI_XBF_DATA类型变量 */
+					 GUI_XBF_TYPE_PROP,    /* 字体类型             */
+					 _cbGetData16,         /* 回调函数             */
+					 &Fontfile16);         /* 回调函数参数         */
+	
+	/* 创建24点阵字体 */
+	GUI_XBF_CreateFont(&XBF_Font24,        /* GUI_FONT类型变量     */
+					 &XBF_Data24,          /* GUI_XBF_DATA类型变量 */
+					 GUI_XBF_TYPE_PROP,    /* 字体类型             */
+					 _cbGetData24,         /* 回调函数             */
+					 &Fontfile24);         /* 回调函数参数         */
+	
+	/* 创建32点阵字体 */
+	GUI_XBF_CreateFont(&XBF_Font32,        /* GUI_FONT类型变量     */
+					 &XBF_Data32,          /* GUI_XBF_DATA类型变量 */
+					 GUI_XBF_TYPE_PROP,    /* 字体类型             */
+					 _cbGetData32,         /* 回调函数             */
+					 &Fontfile32);         /* 回调函数参数         */
+}
+
+
+/*
+*********************************************************************************************************
+*	函 数 名: LoadFontLib()
+*	功能说明: 从SD卡中加载字库文件到SPI FLASH
+*	形    参: 无   	
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+void LoadFontLib(void)
+{
+	float FinishPecent;
+    uint32_t Count = 0;
+	uint16_t y, i;
+	uint8_t ucState;
+	char cDispBuf[32];
+
+	
+	/* 清屏 */
+	GUI_SetBkColor(GUI_BLUE);
+	GUI_Clear();
+	
+	/* 设置字体 */
+	GUI_SetFont(&GUI_FontSong16);
+
+    y = 0;
+	/* 第1步：显示操作说明 ***************************************************************/
+	GUI_DispStringAt("SPI FLASH中存储字库实验", 0, y);
+	y += 16;
+	
+	GUI_DispStringAt("1. 使用前保证SD卡中已经放入字库文件font.bin", 0, y);
+	y += 16;
+	
+	GUI_DispStringAt("2. SD卡中不放入字库文件，无法将其复制到板载SPI FLASH中", 0, y);
+	y += 16;
+	
+	/* 等待10s后开始进行复制，方便客户看屏幕上的显示信息 */
+	for(i = 0; i < 11; i++)
+	{
+		sprintf(cDispBuf, "3. 10秒后开始复制, 还剩余%d秒 ", 10 - i);
+		GUI_DispStringAt(cDispBuf, 0, y);
+		GUI_Delay(1000);
+	}
+	y += 16;
+	
+	FIL file;
+	FRESULT result;
+	UINT bw;
+	FATFS fs;
+	
+	f_mount(&fs, "0:/", 0);
+	
+	/* 第2步：打开文件 ***************************************************************/
+	//result = f_open(&file, "0:/font.bin", FA_OPEN_EXISTING | FA_READ);
+	result = f_open(&file, "font.bin", FA_OPEN_EXISTING | FA_READ);
+	if (result !=  FR_OK)
+	{
+		GUI_DispStringAt("font.bin文件打开失败", 0, y);
+		y += 16;
+	}
+
+	/* 第3步：复制SD卡中字库文件font.bin到SPI FLASH **********************************/
+	for(;;)
+	{
+		/* 读取一个扇区的数据到buf */
+		result = f_read(&file, &tempbuf, g_tSF.PageSize, &bw);
+		
+		/* 读取出错或者读取完毕，退出 */
+		if ((result != FR_OK)||bw == 0)
+		{
+			break;
+		}
+	
+		/* 写数据到SPI FLASH */
+		ucState = sf_WriteBuffer(tempbuf, Count*g_tSF.PageSize, g_tSF.PageSize);
+		
+		/* 如果返回0，表示复制失败 */
+		if(ucState == 0)
+		{
+			GUI_DispStringAt("复制失败                  ", 0, y);
+			break;
+		}
+
+		/* 显示复制进度 */
+		Count = Count + 1;
+		FinishPecent = (float)(Count* g_tSF.PageSize) / file.fsize;
+		sprintf(cDispBuf, "当前完成复制:%02d%%", (uint8_t)(FinishPecent*100));
+		GUI_DispStringAt(cDispBuf, 0, y);
+	}
+	
+	/* 等待1秒后开始进去emWin主界面 */
+	GUI_Delay(1000);
+}

@@ -1,0 +1,22 @@
+#ifndef InitSystem_H_INCLUDED
+#define InitSystem_H_INCLUDED
+#if defined(__cplusplus)
+extern "C" {     /* Make sure we have C-declarations in C++ programs */
+#endif
+
+#include "struct.h"
+#include "mydefine.h"
+
+
+//extern FAULT_RECORD_WAVE FaultRecordWave;
+//extern systemtime Settime;
+
+//extern Setstruct Setting;
+	
+//extern void InitSystem(void);
+
+#endif /* __InitSystem_CONF_H */
+
+
+
+

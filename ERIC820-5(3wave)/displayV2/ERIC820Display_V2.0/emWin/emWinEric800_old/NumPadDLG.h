@@ -1,0 +1,25 @@
+#ifndef NUMPADDLG_H_INCLUDED
+#define  NUMPADDLG_H_INCLUDED
+#if defined(__cplusplus)
+extern "C" {     /* Make sure we have C-declarations in C++ programs */
+#endif
+#include "bsp.h"
+
+extern uint8_t SetIndex;
+extern WM_HWIN TH_hWin;
+extern WM_HWIN PC_hWin;
+extern WM_HWIN LC_hWin;
+extern WM_HWIN VL_hWin;
+extern WM_HWIN CC_hWin;
+extern WM_HWIN CB_hWin;
+extern WM_HWIN DV_hWin;	
+extern WM_HWIN PS_hWin;	
+
+
+
+
+
+
+
+#endif // SYSTEM_TDLG_H_INCLUDED
+

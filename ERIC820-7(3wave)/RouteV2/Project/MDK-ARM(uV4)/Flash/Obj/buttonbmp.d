@@ -1,0 +1,9 @@
+.\flash\obj\buttonbmp.o: ..\..\emWin\emWinEric800\buttonbmp.c
+.\flash\obj\buttonbmp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\flash\obj\buttonbmp.o: ..\..\emWin\Include\GUI.h
+.\flash\obj\buttonbmp.o: ..\..\emWin\Include\GUI_ConfDefaults.h
+.\flash\obj\buttonbmp.o: ..\..\emWin\Config\GUIConf.h
+.\flash\obj\buttonbmp.o: ..\..\emWin\Include\GUI_Type.h
+.\flash\obj\buttonbmp.o: ..\..\emWin\Include\LCD.h
+.\flash\obj\buttonbmp.o: ..\..\emWin\Include\Global.h
+.\flash\obj\buttonbmp.o: ..\..\emWin\Include\GUI_Version.h

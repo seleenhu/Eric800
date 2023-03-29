@@ -1,0 +1,44 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: μVision V5.23.0.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: hsl Microsoft, hyc, LIC=6XJWF-6AEQ6-YDMK5-G946S-IXFRG-PUU79
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.23
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 4 (build 422)
+Assembler:       Armasm.exe V5.06 update 4 (build 422)
+Linker/Locator:  ArmLink.exe V5.06 update 4 (build 422)
+Library Manager: ArmAr.exe V5.06 update 4 (build 422)
+Hex Converter:   FromElf.exe V5.06 update 4 (build 422)
+CPU DLL:         SARMCM3.DLL V5.23
+Dialog DLL:      DCM.DLL V1.15.0.0
+Target DLL:      Segger\JL2CM3.dll V2.99.23.0
+Dialog DLL:      TCM.DLL V1.27.0.0
+ 
+<h2>Project:</h2>
+D:\svnbak\trunk\3.Project\1.Eric800\3.software\ERIC800_V4.1\Project\MDK-ARM(uV4)\project.uvproj
+Project File Date:  10/23/2018
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 4 (build 422)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'Flash'
+compiling passwordDLG.c...
+..\..\emWin\emWinEric800\passwordDLG.c(96): warning:  #177-D: variable "data"  was declared but never referenced
+  	int   data;
+..\..\emWin\emWinEric800\passwordDLG.c: 1 warning, 0 errors
+linking...
+Program Size: Code=350312 RO-data=234240 RW-data=8756 ZI-data=80468  
+FromELF: creating hex file...
+After Build - User command #1: CopyHex_Flash.bat
+D:\svnbak\trunk\3.Project\1.Eric800\3.software\ERIC800_V4.1\Project\MDK-ARM(uV4)>copy Flash\Obj\output.hex ..\output(mdk).hex 
+已复制         1 个文件。
+".\Flash\Obj\output.axf" - 0 Error(s), 1 Warning(s).
+Build Time Elapsed:  00:00:04
+</pre>
+</body>
+</html>

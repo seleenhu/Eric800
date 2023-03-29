@@ -1,0 +1,1 @@
+copy Flash\Obj\output.hex ..\Eric820Calculate.hex
